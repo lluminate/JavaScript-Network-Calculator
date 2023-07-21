@@ -1,2 +1,2 @@
 # JavaScript-Network-Calculator
-Subnet Calculator made with JavaScript and Html
+Subnet Calculator made with JavaScript
