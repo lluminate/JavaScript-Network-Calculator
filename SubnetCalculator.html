@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subnet Calculator</title>
+</head>
+<body>
+    <h1>Subnet Calculator</h1>
+    <label for="ipInput">IP Address:</label>
+    <input type="text" id="ipInput" oninput=" resultsDataTable()"><br>
+    
+    <label for="maskBitsSelection">Mask Bits:</label>
+    <select id="maskBitsSelection" onchange=" resultsDataTable('maskBitsSelection');">
+        <option value="30">30</option>
+        <option value="29">29</option>
+        <option value="28">28</option>
+        <option value="27">27</option>
+        <option value="26">26</option>
+        <option value="25">25</option>
+        <option value="24">24</option>
+        <option value="23">23</option>
+        <option value="22">22</option>
+        <option value="21">21</option>
+        <option value="20">20</option>
+        <option value="19">19</option>
+        <option value="18">18</option>
+        <option value="17">17</option>
+        <option value="16">16</option>
+        <option value="15">15</option>
+        <option value="14">14</option>
+        <option value="13">13</option>
+        <option value="12">12</option>
+        <option value="11">11</option>
+        <option value="10">10</option>
+        <option value="9">9</option>
+        <option value="8">8</option>
+        <option value="7">7</option>
+        <option value="6">6</option>
+        <option value="5">5</option>
+        <option value="4">4</option>
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+    </select><br>
+
+    <label for="subnetMaskSelection">Subnet Mask:</label>
+    <select id="subnetMaskSelection" onchange=" resultsDataTable('subnetMaskSelection')">
+        <option value="255.255.255.252">255.255.255.252</option>
+        <option value="255.255.255.248">255.255.255.248</option>
+        <option value="255.255.255.240">255.255.255.240</option>
+        <option value="255.255.255.224">255.255.255.224</option>
+        <option value="255.255.255.192">255.255.255.192</option>
+        <option value="255.255.255.128">255.255.255.128</option>
+        <option value="255.255.255.0">255.255.255.0</option>
+        <option value="255.255.254.0">255.255.254.0</option>
+        <option value="255.255.252.0">255.255.252.0</option>
+        <option value="255.255.248.0">255.255.248.0</option>
+        <option value="255.255.240.0">255.255.240.0</option>
+        <option value="255.255.224.0">255.255.224.0</option>
+        <option value="255.255.192.0">255.255.192.0</option>
+        <option value="255.255.128.0">255.255.128.0</option>
+        <option value="255.255.0.0">255.255.0.0</option>
+        <option value="255.254.0.0">255.254.0.0</option>
+        <option value="255.252.0.0">255.252.0.0</option>
+        <option value="255.248.0.0">255.248.0.0</option>
+        <option value="255.240.0.0">255.240.0.0</option>
+        <option value="255.224.0.0">255.224.0.0</option>
+        <option value="255.192.0.0">255.192.0.0</option>
+        <option value="255.128.0.0">255.128.0.0</option>
+        <option value="255.0.0.0">255.0.0.0</option>
+        <option value="254.0.0.0">254.0.0.0</option>
+        <option value="252.0.0.0">252.0.0.0</option>
+        <option value="248.0.0.0">248.0.0.0</option>
+        <option value="240.0.0.0">240.0.0.0</option>
+        <option value="224.0.0.0">224.0.0.0</option>
+        <option value="192.0.0.0">192.0.0.0</option>
+        <option value="128.0.0.0">128.0.0.0</option>
+    </select><br>
+
+    <label for="hostsSelection">Hosts:</label>
+    <select id="hostsSelection" onchange=" resultsDataTable('hostsSelection')">
+        <option value="2">2</option>
+        <option value="6">6</option>
+        <option value="14">14</option>
+        <option value="30">30</option>
+        <option value="62">62</option>
+        <option value="126">126</option>
+        <option value="254">254</option>
+        <option value="510">510</option>
+        <option value="1022">1022</option>
+        <option value="2046">2046</option>
+        <option value="4094">4094</option>
+        <option value="8190">8190</option>
+        <option value="16382">16382</option>
+        <option value="32766">32766</option>
+        <option value="65534">65534</option>
+        <option value="131070">131070</option>
+        <option value="262142">262142</option>
+        <option value="524286">524286</option>
+        <option value="1048574">1048574</option>
+        <option value="2097150">2097150</option>
+        <option value="4194302">4194302</option>
+        <option value="8388606">8388606</option>
+        <option value="16777214">16777214</option>
+        <option value="33554430">33554430</option>
+        <option value="67108862">67108862</option>
+        <option value="134217726">134217726</option>
+        <option value="268435454">268435454</option>
+        <option value="536870910">536870910</option>
+        <option value="1073741822">1073741822</option>
+        <option value="2147483646">2147483646</option>
+    </select><br>
+
+    <input type="radio" name="notationSelection" value="Dec" checked="true" onchange=" resultsDataTable()">
+    Dec
+    <input type="radio" name="notationSelection" value="Hex" onchange=" resultsDataTable()">
+    Hex
+    <input type="radio" name="notationSelection" value="Bin" onchange=" resultsDataTable()">
+    Bin
+    <br>
+
+    <textarea id="resultsText" rows="6" cols="50"></textarea> 
+    
+    
+    <script>
+        function ipToHex(ip) {
+            let hex = "";
+            let octets = ip.split(".");
+            for (let i = 0; i < octets.length; i++) {
+                let octet = parseInt(octets[i]).toString(16);
+                if (octet.length === 1) {
+                    octet = "0" + octet;
+                }
+                hex += octet;
+                if (i < octets.length - 1) {
+                    hex += ".";
+                }
+            }
+
+            return hex;
+        }
+
+        function ipToNetwork(ip) {
+            return binaryToIp(ipToBinary(ip).slice(0, -8) + "00000000")
+        }
+
+        function ipToBinary(ip) {
+            let binary = "";
+            let octets = ip.split(".");
+            for (let i = 0; i < octets.length; i++) {
+                let octet = parseInt(octets[i]).toString(2);
+                while (octet.length < 8) {
+                    octet = "0" + octet;
+                }
+                binary += octet;
+            }
+            return binary;
+        }
+
+        function binaryToIp(binary) {
+            let ip = "";
+            for (let i = 0; i < binary.length; i += 8) {
+                let octet = binary.slice(i, i + 8);
+                ip += parseInt(octet, 2);
+                if (i < binary.length - 8) {
+                    ip += ".";
+                }
+            }
+            return ip;
+        }
+
+        function ipRange(maskBits, ip) {
+            let lower = "";
+            let upper = "";
+
+            for (let i = 0; i < (32 - maskBits); i++) {
+                lower += "0";
+                upper += "1";
+            }
+
+            let broadcast = binaryToIp(ipToBinary(ip).slice(0, -(32 - parseInt(maskBits))) + upper);
+            lower = lower.slice(0,-1) + "1"
+            upper = upper.slice(0, -1) + "0"
+
+            return [
+                binaryToIp(ipToBinary(ip).slice(0, -(32 - parseInt(maskBits))) + lower),
+                binaryToIp(ipToBinary(ip).slice(0, -(32 - parseInt(maskBits))) + upper),
+                broadcast
+            ];
+        }
+
+        function isValidIP(ip) {
+            if (ip.split(".").length !== 4) {
+                return false;
+            }
+
+            for (let i = 0; i < ip.split(".").length; i++) {
+                if (Number.isInteger(parseInt(ip.split(".")[i])) === false) {
+                    return false;
+                }
+                
+                if (parseInt(ip.split(".")[i]) > 255 || parseInt(ip.split(".")[i]) < 0) {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+        function maskBitsFunction(maskBits) {
+            let hosts = Math.pow(2, (32 - parseInt(maskBits))) - 2;
+            let binary = "";
+            let subnetMask = "";
+
+            for (let i = 0; i < parseInt(maskBits); i++) {
+                binary += "1";
+            }
+            
+            for (let i = 0; i < (32 - parseInt(maskBits)); i++) {
+                binary += "0";
+            }
+
+            for (let i = 0; i < binary.length; i += 8) {
+                let octet = binary.slice(i, i + 8);
+                subnetMask += parseInt(octet, 2);
+                if (i < binary.length - 8) {
+                    subnetMask += ".";
+                }
+            }
+
+            return [maskBits, subnetMask, hosts];
+        }
+
+        function subnetMaskFunction(subnetMask) {
+            let maskBits = 0;
+            let binary = "";
+
+            for (let i = 0; i < subnetMask.split(".").length; i++) {
+                binary += parseInt(subnetMask.split(".")[i]).toString(2);
+            }
+
+            for (let i = 0; i < binary.length; i++) {
+                if (binary[i] === "1") {
+                    maskBits++;
+                }
+            }
+
+            return [maskBits, subnetMask, Math.pow(2, (32 - maskBits)) - 2];
+        }
+
+        function hostsFunction(hosts) {
+            let maskBits = 32 - Math.log2(parseInt(hosts) + 2);
+            let binary = "";
+            let subnetMask = "";
+
+            for (let i = 0; i < maskBits; i++) {
+                binary += "1";
+            }
+
+            for (let i = 0; i < (32 - maskBits); i++) {
+                binary += "0";
+            }
+
+            for (let i = 0; i < binary.length; i += 8) {
+                let octet = binary.slice(i, i + 8);
+                subnetMask += parseInt(octet, 2);
+                if (i < binary.length - 8) {
+                    subnetMask += ".";
+                }
+            }
+
+            return [maskBits, subnetMask, hosts];
+        }
+
+        function  resultsDataTable(selectionType) {
+            const ipInput = document.getElementById("ipInput").value;
+            const maskBitsDropdown = document.getElementById("maskBitsSelection");
+            const subnetMaskDropdown = document.getElementById("subnetMaskSelection");
+            const hostsDropdown = document.getElementById("hostsSelection");
+            const notationSelection = document.querySelector("input[name='notationSelection']:checked");
+            const resultsText = document.getElementById("resultsText")
+            
+            let maskBitsSelection, subnetMaskSelection, hostsSelection;
+
+            if (selectionType === 'maskBitsSelection') {
+                [maskBitsSelection, subnetMaskSelection, hostsSelection] = maskBitsFunction(maskBitsDropdown.value);
+                subnetMaskDropdown.value = subnetMaskSelection;
+                hostsDropdown.value = hostsSelection;
+            } else if (selectionType === 'subnetMaskSelection') {
+                [maskBitsSelection, subnetMaskSelection, hostsSelection] = subnetMaskFunction(subnetMaskDropdown.value);
+                maskBitsDropdown.value = maskBitsSelection;
+                hostsDropdown.value = hostsSelection;
+            } else if (selectionType === 'hostsSelection') {
+                [maskBitsSelection, subnetMaskSelection, hostsSelection] = hostsFunction(hostsDropdown.value);
+                maskBitsDropdown.value = maskBitsSelection;
+                subnetMaskDropdown.value = subnetMaskSelection;
+            }
+
+            [maskBitsSelection, subnetMaskSelection, hostsSelection] = maskBitsFunction(maskBitsDropdown.value);
+
+            let [lowerRange, upperRange, broadcast] = ipRange(maskBitsSelection, ipInput);
+
+            if (isValidIP(ipInput) === true) {
+                if (notationSelection.value === "Dec") {
+                    resultsText.value =
+                        `Network: ${ipToNetwork(ipInput)}/${maskBitsSelection}\n` +
+                        `Netmask: ${subnetMaskSelection}\n` +
+                        `IP Range: ${lowerRange}\n` +
+                        `          ${upperRange}\n` +
+                        `Hosts: ${hostsSelection}\n` +
+                        `Broadcast: ${broadcast}`;
+                } else if (notationSelection.value === "Hex") {
+                    resultsText.value =
+                        `Network: ${ipToHex(ipToNetwork(ipInput))}/${parseInt(maskBitsSelection).toString(16)}\n` +
+                        `Netmask: ${ipToHex(subnetMaskSelection)}\n` +
+                        `IP Range: ${ipToHex(lowerRange)}\n` +
+                        `          ${ipToHex(upperRange)}\n` +
+                        `Hosts: ${parseInt(hostsSelection).toString(16)}\n` +
+                        `Broadcast: ${ipToHex(broadcast)}`;
+                } else if (notationSelection.value === "Bin") {
+                    resultsText.value =
+                        `Network: ${ipToBinary(ipToNetwork(ipInput))}\n` +
+                        `Netmask: ${ipToBinary(subnetMaskSelection)}\n` +
+                        `IP Range: ${ipToBinary(lowerRange)}\n` +
+                        `          ${ipToBinary(upperRange)}\n` +
+                        `Broadcast: ${ipToBinary(broadcast)}`;
+                }
+            } else {
+                resultsText.value = "Invalid IP Address";
+            }
+        }
+
+        // Call  resultsDataTable on initial load to display the results
+        resultsDataTable();
+    </script>
+
+</body>
+</html>
